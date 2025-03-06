@@ -1,0 +1,16 @@
+{
+  "name": "you-tube",
+  "version": "1.0.0",
+  "description": "a fullstack backend",
+  "keywords": [
+    "javascript",
+    "backend"
+  ],
+  "license": "ISC",
+  "author": "Salusha",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
