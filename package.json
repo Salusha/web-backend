@@ -2,15 +2,21 @@
   "name": "you-tube",
   "version": "1.0.0",
   "description": "a fullstack backend",
+  "type": "module",
   "keywords": [
     "javascript",
     "backend"
   ],
   "license": "ISC",
   "author": "Salusha",
-  "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "you-tube": "file:"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
