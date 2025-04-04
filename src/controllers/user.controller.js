@@ -5,9 +5,14 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 
-const generateAccessAndRefereshTokens = async(userId) =>{
+
+const generateAccessAndRefreshTokens = async(userId) =>{
     try {
         const user = await User.findById(userId)
+        if (!user) {
+            throw new ApiError(404, "User not found");
+        }
+
         const accessToken = user.generateAccessToken()
         const refreshToken = user.generateRefreshToken()
 
@@ -26,6 +31,10 @@ const generateAccessAndRefereshTokens = async(userId) =>{
 const registerUser = asyncHandler(async (req,res)=>{
     // console.log("Received Body:", req.body); 
     // console.log("Received Files:", req.files); 
+
+//     console.log("req.files:", req.files);
+// console.log("avatar path:", req.files?.avatar?.[0]?.path);
+
 
 
     //get user details from frontend
@@ -57,6 +66,7 @@ const registerUser = asyncHandler(async (req,res)=>{
 
     if(existedUser){
         throw new ApiError(409, "User with email or username already exists")
+        
     }
     // console.log(req.files);
 
@@ -114,7 +124,7 @@ const loginUser = asyncHandler(async (req, res) =>{
     //send cookie
 
     const {email, username, password} = req.body
-    console.log(email);
+    // console.log(email);
     // console.log("Received request body:", req.body);
 
 
@@ -142,7 +152,7 @@ const loginUser = asyncHandler(async (req, res) =>{
     throw new ApiError(401, "Invalid user credentials")
     }
 
-   const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(user._id)
+   const {accessToken, refreshToken} = await generateAccessAndRefreshTokens(user._id)
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
@@ -195,7 +205,7 @@ const logoutUser = asyncHandler(async(req, res) => {
 const refreshAccessToken=asyncHandler(async(req, res)=>{
      const incomingRefreshToken=req.cookies.refreshToken || req.body.refreshToken
 
-     if(incomingRefreshToken){
+     if(!incomingRefreshToken){
            throw new ApiError(401, "Unauthorized Request")
      }
 
@@ -217,7 +227,7 @@ const refreshAccessToken=asyncHandler(async(req, res)=>{
            secure: true
         }
    
-        const {accessToken, newRefreshToken}=await generateAccessAndRefereshTokens(user._id)
+        const {accessToken, newRefreshToken}=await generateAccessAndRefreshTokens(user._id)
    
         return res
         .status(200)

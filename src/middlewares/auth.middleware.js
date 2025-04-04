@@ -5,8 +5,13 @@ import { ApiError } from "../utils/ApiError.js";
  
  export const verifyJWT = asyncHandler(async(req, _, next) => {
      try {
-         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
-         console.log(token);
+        const tokenFromCookie = req.cookies?.accessToken;
+        const tokenFromHeader = req.header("Authorization")?.replace("Bearer ", "");
+    
+        const token = tokenFromCookie || tokenFromHeader;
+        //  console.log(token);
+        //  console.log("Cookie token:", tokenFromCookie);
+        //  console.log("Header token:", tokenFromHeader);
 
          if (!token) {
              throw new ApiError(401, "Unauthorized request")
@@ -17,7 +22,7 @@ import { ApiError } from "../utils/ApiError.js";
          const user = await User.findById(decodedToken?._id).select("-password -refreshToken")
      
          if (!user) {
-             // NEXT_VIDEO: discuss about frontend
+             //frontend 
              throw new ApiError(401, "Invalid Access Token")
          }
      

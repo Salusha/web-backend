@@ -16,9 +16,11 @@ import fs from "fs";
             })
             //file has been uploaded successfully
             // console.log("file uploaded on cloudinary", response.url);
+            console.log("Deleting file at:", localFilePath);
             fs.unlinkSync(localFilePath);
             return response;
         } catch (error) {
+            console.error("Cloudinary upload error:", error.message || error);
             fs.unlinkSync(localFilePath)   //remove the locally saved temporary file as the upload operation got failed
             return null;
         }
