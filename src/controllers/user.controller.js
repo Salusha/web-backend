@@ -27,7 +27,6 @@ const generateAccessAndRefreshTokens = async(userId) =>{
     }
 }
 
-
 const registerUser = asyncHandler(async (req,res)=>{
     // console.log("Received Body:", req.body); 
     // console.log("Received Files:", req.files); 
